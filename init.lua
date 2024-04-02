@@ -48,12 +48,20 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
+      {
+        'williamboman/mason.nvim',
+        config = true
+      },
+
+      -- Paired with the LSP above
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        tag = 'legacy',
+        opts = {} -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+      },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -77,23 +85,26 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
-
-  -- copilot (see https://github.com/folke/dot/commit/7fbe9130ab631a8b1851c6a6a5242212a2b256e7)
   {
-    "zbirenbaum/copilot.lua",
-    enabled = true,
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({})
-    end,
-    -- opts = {
-    --   suggestion = { enabled = false },
-    --   panel = { enabled = false },
-    -- },
+    'folke/which-key.nvim',
+    opts = {}
   },
 
+  -- copilot (see https://github.com/folke/dot/commit/7fbe9130ab631a8b1851c6a6a5242212a2b256e7)
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   enabled = true,
+  --   cmd = "Copilot",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     require("copilot").setup({})
+  --   end,
+  --   -- opts = {
+  --   --   suggestion = { enabled = false },
+  --   --   panel = { enabled = false },
+  --   -- },
+  -- },
+  --
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -155,6 +166,17 @@ require('lazy').setup({
     end,
   },
 
+  -- {
+  --   'rose-pine/neovim',
+  --   name = 'rose-pine',
+  --   config = function()
+  --     require('rose-pine').setup({
+  --       disable_background = true
+  --     })
+  --     vim.cmd.colorscheme 'rose-pine'
+  --   end,
+  -- },
+
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -169,58 +191,92 @@ require('lazy').setup({
     },
   },
 
+  -- Add indentation guides even on blank lines
   {
-    -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
     opts = {
-      indent_blankline_enabled = true, -- enable/disable this
-      --char = '┊',
-      --indent_blankline_char_list = {'¦','┊',  '|', '¦', '┆', '┊'},
-      --indent_blankline_char_list = {'¦', '┆', '┆', '┆'},
-      show_trailing_blankline_indent = false,
-      indent_blankline_use_treesitter = true,
-
-    },
-  },
-
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
-
-  -- for writing
-  {
-    "folke/zen-mode.nvim",
-    opts = {
-      window = {
-        width = 100,      -- width of the Zen window
-        options = {
-          number = false, -- disable number column
-        }
-      }
-    },
-    -- callback where you can add custom code when the Zen window opens
-    on_open = function(win)
-      vim.cmd ':setlocal spell spelllang=en_us <CR>'
-    end,
-    -- callback where you can add custom code when the Zen window closes
-    on_close = function()
-      vim.cmd ':setLocal nospell <CR>'
-    end,
-  },
-  -- This is a nice pair with zen-mode (activated automatically)
-  {
-    "folke/twilight.nvim",
-    opts = {
-      dimming = {
-        alpha = 0.25, -- amount of dimming
+      -- indent = {
+      --   highlight = { "CursorColumn", "Whitespace" },
+      --   char = "",
+      -- },
+      -- whitespace = {
+      --   highlight = { "CursorColumn", "Whitespace" },
+      --   remove_blankline_trail = false,
+      -- },
+      scope = {
+        enabled = true,
       },
-      context = 25,   -- amount of lines we will try to show around the current line
     }
   },
 
+  -- Automatically look up error with GPT or Google
+  {
+    "piersolenski/wtf.nvim",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+    },
+    opts = {},
+    keys = {
+      {
+        "gw",
+        mode = { "n", "x" },
+        function()
+          require("wtf").ai()
+        end,
+        desc = "Debug diagnostic with AI",
+      },
+      {
+        mode = { "n" },
+        "gW",
+        function()
+          require("wtf").search()
+        end,
+        desc = "Search diagnostic with Google",
+      },
+    },
+  },
+
+  -- GPT Plugin
+  {
+    "robitx/gp.nvim",
+    config = function()
+      require("gp").setup()
+
+      -- or setup with your own config (see Install > Configuration in Readme)
+      -- require("gp").setup(config)
+
+      -- shortcuts might be setup here (see Usage > Shortcuts in Readme)
+    end,
+  },
+
+  -- GPT plugin
+  -- {
+  --   "jackMort/ChatGPT.nvim",
+  --     event = "VeryLazy",
+  --     config = function()
+  --       require("chatgpt").setup()
+  --     end,
+  --     dependencies = {
+  --       "MunifTanjim/nui.nvim",
+  --       "nvim-lua/plenary.nvim",
+  --       "folke/trouble.nvim",
+  --       "nvim-telescope/telescope.nvim"
+  --     }
+  -- },
+
+  -- "gc" to comment visual regions/lines
+  {
+    'numToStr/Comment.nvim',
+    opts = {}
+  },
+
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
+  {
+    'nvim-telescope/telescope.nvim',
+    branch = '0.1.x',
+    dependencies = { 'nvim-lua/plenary.nvim' }
+  },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
   -- Only load if `make` is available. Make sure you have the system
@@ -303,9 +359,11 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Better diff display
+vim.o.diffopt = "internal,filler,closeoff,vertical,iwhite,linematch:60"
 
--- buffer thing
---vim.opt.hidden = true
+-- buffer thing (default is true)
+--vim.o.hidden = true
 
 -- [[ Basic Keymaps ]]
 
@@ -345,17 +403,17 @@ require('telescope').setup {
 pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
--- vim.keymap.set('n', '<leader>/', function()
---   -- You can pass additional configuration to telescope to change theme, layout, etc.
---   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
---     winblend = 0,
---     previewer = false,
---   })
--- end, { desc = '[/] Fuzzily search in current buffer' })
+vim.keymap.set('n', '<leader>/', function()
+  -- You can pass additional configuration to telescope to change theme, layout, etc.
+  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+    winblend = 0,
+    previewer = false,
+  })
+end, { desc = '[/] Fuzzily search in current buffer' })
 
 -- Symbol prefix
-vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find,
-  { desc = '[/] Fuzzily search in current buffer' })
+-- vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find,
+--   { desc = '[/] Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').help_tags, { desc = '[?] Search Help' })
 
 -- [S]earch prefix
@@ -378,7 +436,25 @@ require('nvim-treesitter.configs').setup {
   sync_install = false, -- default false
   ignore_install = {},
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'java', 'glimmer' },
+  ensure_installed = {
+    'bash',
+    'c',
+    'cpp',
+    'css',
+    'glimmer',
+    'go',
+    'html',
+    'java',
+    'javascript',
+    'lua',
+    'markdown',
+    'python',
+    'rust',
+    'tsx',
+    'typescript',
+    'vim',
+    'vimdoc',
+  },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -520,6 +596,16 @@ local servers = {
     Lua = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
+      diagnostics = {
+        disable = { "missing-fields" },
+      },
+      format = {
+        enable = true,
+        defaultConfig = {
+          indent_style = "space",
+          indent_size = "4",
+        }
+      },
     },
   },
 }
@@ -562,6 +648,10 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
+  -- disable in markdown files
+  enabled = function()
+    return (vim.bo.filetype ~= "markdown")
+  end,
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
@@ -597,7 +687,16 @@ cmp.setup {
   },
 }
 
-vim.o.diffopt = "internal,filler,closeoff,vertical,iwhite,linematch:60"
+
+-- set some options for "textual" files to enhance readability
+local spellGroup = vim.api.nvim_create_augroup("spell_files", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  pattern = { "*.md, *.txt" },
+  group = spellGroup,
+  command = "setlocal spell wrap linebreak",
+  -- this is nice, but will mess with copy/paste
+  --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
+})
 
 -- auto save the buffer
 -- vim.opt.autowriteall = true
