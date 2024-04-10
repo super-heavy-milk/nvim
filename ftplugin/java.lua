@@ -31,22 +31,6 @@ end
 local on_attach = function(client, bufnr)
   -- Regular Neovim LSP client keymappings
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  -- nnoremap('gD', vim.lsp.buf.declaration, bufopts, "Go to declaration")
-  -- nnoremap('gd', vim.lsp.buf.definition, bufopts, "Go to definition")
-  -- nnoremap('gi', vim.lsp.buf.implementation, bufopts, "Go to implementation")
-  -- nnoremap('K', vim.lsp.buf.hover, bufopts, "Hover text")
-  -- nnoremap('<C-k>', vim.lsp.buf.signature_help, bufopts, "Show signature")
-  -- nnoremap('<space>wa', vim.lsp.buf.add_workspace_folder, bufopts, "Add workspace folder")
-  -- nnoremap('<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts, "Remove workspace folder")
-  -- nnoremap('<space>wl', function()
-  --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  -- end, bufopts, "List workspace folders")
-  -- nnoremap('<space>D', vim.lsp.buf.type_definition, bufopts, "Go to type definition")
-  -- nnoremap('<space>rn', vim.lsp.buf.rename, bufopts, "Rename")
-  -- nnoremap('<space>ca', vim.lsp.buf.code_action, bufopts, "Code actions")
-  -- vim.keymap.set('v', "<space>ca", "<ESC><CMD>lua vim.lsp.buf.range_code_action()<CR>",
-  --   { noremap=true, silent=true, buffer=bufnr, desc = "Code actions" })
-  -- nnoremap('<space>f', function() vim.lsp.buf.format { async = true } end, bufopts, "Format file")
 
   -- Java extensions provided by jdtls
   nnoremap("<space>oi", jdtls.organize_imports, bufopts, "Organize imports")
@@ -60,25 +44,37 @@ local config = {
   flags = {
     debounce_text_changes = 80,
   },
-  on_attach = on_attach, -- We pass our on_attach keybindings to the configuration map
-  root_dir = root_dir,   -- Set the root directory to our found root_marker
+
+  -- pass the on_attach keybindings to the configuration map
+  on_attach = on_attach,
+
+  -- Set the root directory to our found root_marker
+  root_dir = root_dir,
+
   -- Here you can configure eclipse.jdt.ls specific settings
   -- These are defined by the eclipse.jdt.ls project and will be passed to eclipse when starting.
   -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
   -- for a list of options
   settings = {
     java = {
+
+      -- Use Google Java style guidelines for formatting
+      -- To use, make sure to download the file from
+      -- https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml
+      -- and place it in the ~/.local/share/eclipse directory
       format = {
         settings = {
-          -- Use Google Java style guidelines for formatting
-          -- To use, make sure to download the file from https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml
-          -- and place it in the ~/.local/share/eclipse directory
-          url = "/.local/share/eclipse/eclipse-java-google-style.xml",
+          url = home .. "/.local/share/eclipse/eclipse-java-google-style.xml",
           profile = "GoogleStyle",
         },
       },
+
+      -- not sure what this does
       signatureHelp = { enabled = true },
-      contentProvider = { preferred = 'fernflower' }, -- Use fernflower to decompile library code
+
+      -- Use fernflower to decompile library code
+      contentProvider = { preferred = 'fernflower' },
+
       -- Specify any completion options
       completion = {
         favoriteStaticMembers = {
@@ -94,9 +90,11 @@ local config = {
           "com.sun.*",
           "io.micrometer.shaded.*",
           "java.awt.*",
-          "jdk.*", "sun.*",
+          "jdk.*",
+          "sun.*",
         },
       },
+
       -- Specify any options for organizing imports
       sources = {
         organizeImports = {
@@ -104,6 +102,7 @@ local config = {
           staticStarThreshold = 9999,
         },
       },
+
       -- How code generation should act
       codeGeneration = {
         toString = {
@@ -114,6 +113,7 @@ local config = {
         },
         useBlocks = true,
       },
+
       -- If you are developing in projects with different Java versions, you need
       -- to tell eclipse.jdt.ls to use the location of the JDK for your Java version
       -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
@@ -141,7 +141,11 @@ local config = {
   -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
   -- for the full list of options
   cmd = {
-    sdkman_path .. "17.0.9-ms/bin/java", -- use java 17 or higher
+
+    -- use java 17 or higher
+    sdkman_path .. "17.0.9-ms/bin/java",
+
+    -- eclipse options
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -151,6 +155,7 @@ local config = {
     '--add-modules=ALL-SYSTEM',
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+
     -- If you use lombok, download the lombok jar and place it in ~/.local/share/eclipse
     '-javaagent:' .. jdtls_path .. 'lombok.jar',
 
