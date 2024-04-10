@@ -316,6 +316,12 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
+  -- time tracking, see https://wakatime.com/dashboard
+  {
+    'wakatime/vim-wakatime',
+    lazy = false
+  },
+
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -330,7 +336,7 @@ require('lazy').setup({
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
 
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 
 }, {})
 
@@ -591,6 +597,7 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
+  nmap('<leader>rf', vim.lsp.buf.format, '[R]e[f]ormat Code')
 end
 
 -- Enable the following language servers
@@ -607,6 +614,7 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  -- jdtls = {},
   gopls = {},
   lua_ls = {
     Lua = {
