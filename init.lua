@@ -370,6 +370,7 @@ require('lazy').setup({
     }
   },
 
+  -- https://www.josean.com/posts/neovim-linting-and-formatting
   {
     "stevearc/conform.nvim",
     event = { "BufReadPre", "BufNewFile" },
@@ -402,9 +403,16 @@ require('lazy').setup({
         conform.format({
           lsp_fallback = true,
           async = false,
-          timeout_ms = 500,
+          timeout_ms = 1000,
         })
-        vim.notify("Formatted '" .. vim.fs.basename(vim.api.nvim_buf_get_name(0)) .. "'")
+        local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
+        local mode = vim.api.nvim_get_mode().mode
+        local is_visual = mode == "v" or mode == "V" or mode == "\22"
+        if is_visual then
+          vim.notify("Formatted range in '" .. bufname .. "'")
+        else
+          vim.notify("Formatted '" .. bufname .. "'")
+        end
       end, { desc = "Format file or range (in visual mode)" })
     end,
   },
