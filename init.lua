@@ -284,7 +284,17 @@ require('lazy').setup({
   -- "gc" to comment visual regions/lines
   {
     'numToStr/Comment.nvim',
-    opts = {}
+    opts = {
+      padding = true,
+      sticky = true,
+      ignore = nil,
+      toggler = { line = 'gcc', block = 'gbc' },
+      opleader = { line = 'gc', block = 'gb' },
+      extra = { above = 'gcO', below = 'gco', eol = 'gcA' },
+      mappings = { basic = true, extra = true },
+      pre_hook = nil,
+      post_hook = nil,
+    }
   },
 
   -- Fuzzy Finder (files, lsp, etc)
@@ -331,6 +341,74 @@ require('lazy').setup({
   {
     "fladson/vim-kitty"
   },
+
+  -- markdown
+  -- {
+  --   'plasticboy/vim-markdown',
+  --   branch = 'master',
+  --   require = { 'godlygeek/tabular' },
+  -- },
+
+  -- markdown motions and some basic italics
+  {
+    "tadmccorkle/markdown.nvim",
+    ft = "markdown", -- or 'event = "VeryLazy"'
+    opts = {
+      -- configuration here or empty for defaults
+    },
+  },
+
+  -- better display of markdown within the editor
+  {
+    "lukas-reineke/headlines.nvim",
+    dependencies = "nvim-treesitter/nvim-treesitter",
+    -- config = true,   -- or `opts = {}`
+    opts = {
+      markdown = {
+        bullets = {}
+      }
+    }
+  },
+
+  {
+    "stevearc/conform.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local conform = require("conform")
+      conform.setup({
+        formatters_by_ft = {
+          javascript = { "prettier" },
+          typescript = { "prettier" },
+          javascriptreact = { "prettier" },
+          typescriptreact = { "prettier" },
+          svelte = { "prettier" },
+          css = { "prettier" },
+          html = { "prettier" },
+          json = { "prettier" },
+          yaml = { "prettier" },
+          markdown = { "prettier" },
+          graphql = { "prettier" },
+          lua = { "stylua" },
+          python = { "isort", "black" },
+        },
+        -- format_on_save = {
+        --   lsp_fallback = true,
+        --   async = false,
+        --   timeout_ms = 500,
+        -- },
+      })
+
+      vim.keymap.set({ "n", "v" }, "<leader>rf", function()
+        conform.format({
+          lsp_fallback = true,
+          async = false,
+          timeout_ms = 500,
+        })
+        vim.notify("Formatted '" .. vim.fs.basename(vim.api.nvim_buf_get_name(0)) .. "'")
+      end, { desc = "Format file or range (in visual mode)" })
+    end,
+  },
+
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -479,6 +557,7 @@ require('nvim-treesitter.configs').setup {
     'javascript',
     'lua',
     'markdown',
+    'markdown_inline',
     'python',
     'rust',
     'tsx',
@@ -603,10 +682,10 @@ local on_attach = function(_, bufnr)
   end, '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
-  nmap('<leader>rf', vim.lsp.buf.format, '[R]e[f]ormat Code')
+  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+  --   vim.lsp.buf.format()
+  -- end, { desc = 'Format current buffer with LSP' })
+  -- nmap('<leader>rf', vim.lsp.buf.format, '[R]e[f]ormat Code')
 end
 
 -- Enable the following language servers
@@ -726,7 +805,7 @@ local spellGroup = vim.api.nvim_create_augroup("spell_files", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   pattern = { "*.md, *.txt" },
   group = spellGroup,
-  command = "setlocal spell wrap linebreak",
+  command = "setlocal spell wrap linebreak conceallevel=1",
   -- this is nice, but will mess with copy/paste
   --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
 })
