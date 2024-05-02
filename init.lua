@@ -330,9 +330,9 @@ require('lazy').setup({
   },
 
   -- java
-  {
-    'mfussenegger/nvim-jdtls',
-  },
+  -- {
+  --   'mfussenegger/nvim-jdtls',
+  -- },
 
   -- kitty.conf highlighting
   {
@@ -398,19 +398,27 @@ require('lazy').setup({
       }
 
       vim.keymap.set({ 'n', 'v' }, '<leader>rf', function()
-        conform.format {
+        conform.format({
           lsp_fallback = true,
           async = false,
           timeout_ms = 1000,
-        }
-        local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
-        local mode = vim.api.nvim_get_mode().mode
-        local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
-        if is_visual then
-          vim.notify("Formatted range in '" .. bufname .. "'")
-        else
-          vim.notify("Formatted '" .. bufname .. "'")
-        end
+        }, function(err, did_edit)
+          local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
+          if did_edit then
+            local mode = vim.api.nvim_get_mode().mode
+            local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
+            if is_visual then
+              vim.notify("Formatted range in '" .. bufname .. "'")
+            else
+              vim.notify("Formatted '" .. bufname .. "'")
+            end
+          else
+            vim.notify("Did not format '" .. bufname .. "'")
+          end
+          if err then
+            vim.notify("Error formatting '" .. err .. "'")
+          end
+        end)
       end, { desc = 'Format file or range (in visual mode)' })
     end,
   },
