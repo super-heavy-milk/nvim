@@ -55,7 +55,7 @@ require('lazy').setup({
       -- Automatically install LSPs to stdpath for neovim
       {
         'williamboman/mason.nvim',
-        config = true
+        config = true,
       },
 
       -- Paired with the LSP above
@@ -65,7 +65,7 @@ require('lazy').setup({
       {
         'j-hui/fidget.nvim',
         tag = 'legacy',
-        opts = {} -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+        opts = {}, -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       },
 
       -- Additional lua configuration, makes nvim stuff amazing!
@@ -92,7 +92,7 @@ require('lazy').setup({
   -- Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim',
-    opts = {}
+    opts = {},
   },
 
   -- copilot (see https://github.com/folke/dot/commit/7fbe9130ab631a8b1851c6a6a5242212a2b256e7)
@@ -123,12 +123,9 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
-          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk,
-          { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk,
-          { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
+        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
     },
   },
@@ -157,17 +154,17 @@ require('lazy').setup({
 
   {
     'briones-gabriel/darcula-solid.nvim',
-    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     dependencies = {
-      'rktjmp/lush.nvim'
+      'rktjmp/lush.nvim',
     },
     config = function()
-      vim.cmd('colorscheme darcula-solid')
+      vim.cmd 'colorscheme darcula-solid'
       -- below lines make the background inherit the terminal background
-      vim.cmd('hi Normal ctermbg=none')
-      vim.cmd('highlight NonText ctermbg=none')
-      vim.cmd('hi Normal guibg=none')
+      vim.cmd 'hi Normal ctermbg=none'
+      vim.cmd 'highlight NonText ctermbg=none'
+      vim.cmd 'hi Normal guibg=none'
     end,
   },
 
@@ -209,8 +206,8 @@ require('lazy').setup({
 
   -- Add indentation guides even on blank lines
   {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
     opts = {
       -- indent = {
       --   highlight = { "CursorColumn", "Whitespace" },
@@ -223,41 +220,41 @@ require('lazy').setup({
       scope = {
         enabled = true,
       },
-    }
+    },
   },
 
   -- Automatically look up error with GPT or Google
   {
-    "piersolenski/wtf.nvim",
+    'piersolenski/wtf.nvim',
     dependencies = {
-      "MunifTanjim/nui.nvim",
+      'MunifTanjim/nui.nvim',
     },
     opts = {},
     keys = {
       {
-        "gw",
-        mode = { "n", "x" },
+        'gw',
+        mode = { 'n', 'x' },
         function()
-          require("wtf").ai()
+          require('wtf').ai()
         end,
-        desc = "Debug diagnostic with AI",
+        desc = 'Debug diagnostic with AI',
       },
       {
-        mode = { "n" },
-        "gW",
+        mode = { 'n' },
+        'gW',
         function()
-          require("wtf").search()
+          require('wtf').search()
         end,
-        desc = "Search diagnostic with Google",
+        desc = 'Search diagnostic with Google',
       },
     },
   },
 
   -- GPT Plugin
   {
-    "robitx/gp.nvim",
+    'robitx/gp.nvim',
     config = function()
-      require("gp").setup()
+      require('gp').setup()
 
       -- or setup with your own config (see Install > Configuration in Readme)
       -- require("gp").setup(config)
@@ -294,14 +291,14 @@ require('lazy').setup({
       mappings = { basic = true, extra = true },
       pre_hook = nil,
       post_hook = nil,
-    }
+    },
   },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    dependencies = { 'nvim-lua/plenary.nvim' },
   },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built.
@@ -329,17 +326,17 @@ require('lazy').setup({
   -- time tracking, see https://wakatime.com/dashboard
   {
     'wakatime/vim-wakatime',
-    lazy = false
+    lazy = false,
   },
 
   -- java
   {
-    "mfussenegger/nvim-jdtls",
+    'mfussenegger/nvim-jdtls',
   },
 
   -- kitty.conf highlighting
   {
-    "fladson/vim-kitty"
+    'fladson/vim-kitty',
   },
 
   -- markdown
@@ -351,8 +348,8 @@ require('lazy').setup({
 
   -- markdown motions and some basic italics
   {
-    "tadmccorkle/markdown.nvim",
-    ft = "markdown", -- or 'event = "VeryLazy"'
+    'tadmccorkle/markdown.nvim',
+    ft = 'markdown', -- or 'event = "VeryLazy"'
     opts = {
       -- configuration here or empty for defaults
     },
@@ -360,60 +357,69 @@ require('lazy').setup({
 
   -- better display of markdown within the editor
   {
-    "lukas-reineke/headlines.nvim",
-    dependencies = "nvim-treesitter/nvim-treesitter",
+    'lukas-reineke/headlines.nvim',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
     -- config = true,   -- or `opts = {}`
     opts = {
       markdown = {
-        bullets = {}
-      }
-    }
+        bullets = {},
+        codeblock_highlight = '',
+      },
+    },
   },
 
   -- https://www.josean.com/posts/neovim-linting-and-formatting
   {
-    "stevearc/conform.nvim",
-    event = { "BufReadPre", "BufNewFile" },
+    'stevearc/conform.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
-      local conform = require("conform")
-      conform.setup({
+      local conform = require 'conform'
+      conform.setup {
         formatters_by_ft = {
-          javascript = { "prettier" },
-          typescript = { "prettier" },
-          javascriptreact = { "prettier" },
-          typescriptreact = { "prettier" },
-          svelte = { "prettier" },
-          css = { "prettier" },
-          html = { "prettier" },
-          json = { "prettier" },
-          yaml = { "prettier" },
-          markdown = { "prettier" },
-          graphql = { "prettier" },
-          lua = { "stylua" },
-          python = { "isort", "black" },
+          javascript = { 'prettier' },
+          typescript = { 'prettier' },
+          javascriptreact = { 'prettier' },
+          typescriptreact = { 'prettier' },
+          svelte = { 'prettier' },
+          css = { 'prettier' },
+          html = { 'prettier' },
+          json = { 'prettier' },
+          yaml = { 'prettier' },
+          markdown = { 'prettier' },
+          graphql = { 'prettier' },
+          lua = { 'stylua' },
+          python = { 'ruff_format' },
         },
         -- format_on_save = {
         --   lsp_fallback = true,
         --   async = false,
         --   timeout_ms = 500,
         -- },
-      })
+      }
 
-      vim.keymap.set({ "n", "v" }, "<leader>rf", function()
-        conform.format({
+      vim.keymap.set({ 'n', 'v' }, '<leader>rf', function()
+        conform.format {
           lsp_fallback = true,
           async = false,
           timeout_ms = 1000,
-        })
+        }
         local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
         local mode = vim.api.nvim_get_mode().mode
-        local is_visual = mode == "v" or mode == "V" or mode == "\22"
+        local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
         if is_visual then
           vim.notify("Formatted range in '" .. bufname .. "'")
         else
           vim.notify("Formatted '" .. bufname .. "'")
         end
-      end, { desc = "Format file or range (in visual mode)" })
+      end, { desc = 'Format file or range (in visual mode)' })
+    end,
+  },
+
+  -- justfile highlighing
+  {
+    'IndianBoy42/tree-sitter-just',
+    config = function()
+      require('tree-sitter-just').setup {}
     end,
   },
 
@@ -432,7 +438,6 @@ require('lazy').setup({
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
 
   { import = 'custom.plugins' },
-
 }, {})
 
 -- [[ Setting options ]]
@@ -477,7 +482,7 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.termguicolors = true
 
 -- Better diff display
-vim.o.diffopt = "internal,filler,closeoff,vertical,iwhite,linematch:60"
+vim.o.diffopt = 'internal,filler,closeoff,vertical,iwhite,linematch:60'
 
 -- buffer thing (default is true)
 --vim.o.hidden = true
@@ -549,7 +554,7 @@ vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { des
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
-  modules = {},         -- i don't know what this does but the linter was complaining
+  modules = {}, -- i don't know what this does but the linter was complaining
   sync_install = false, -- default false
   ignore_install = {},
   -- Add languages to be installed here that you want installed for treesitter
@@ -641,9 +646,9 @@ vim.keymap.set('n', '<leader>se', vim.diagnostic.open_float, { desc = '[S]how fl
 vim.keymap.set('n', '<leader>le', vim.diagnostic.setloclist, { desc = 'Open diagnostics in [L]ocalList' })
 
 -- disable floating virtual text - use <space>le to open local list and jump around
-vim.diagnostic.config({
-  virtual_text = false
-})
+vim.diagnostic.config {
+  virtual_text = false,
+}
 
 -- Show line diagnostics automatically in hover window
 -- vim.o.updatetime = 500
@@ -717,14 +722,14 @@ local servers = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
       diagnostics = {
-        disable = { "missing-fields" },
+        disable = { 'missing-fields' },
       },
       format = {
         enable = true,
         defaultConfig = {
-          indent_style = "space",
-          indent_size = "4",
-        }
+          indent_style = 'space',
+          indent_size = '4',
+        },
       },
     },
   },
@@ -752,7 +757,7 @@ mason_lspconfig.setup_handlers {
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
     }
-  end
+  end,
 }
 
 -- [[ Configure nvim-cmp ]]
@@ -770,7 +775,7 @@ cmp.setup {
   },
   -- disable in markdown files
   enabled = function()
-    return (vim.bo.filetype ~= "markdown")
+    return (vim.bo.filetype ~= 'markdown')
   end,
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -807,13 +812,12 @@ cmp.setup {
   },
 }
 
-
 -- set some options for "textual" files to enhance readability
-local spellGroup = vim.api.nvim_create_augroup("spell_files", { clear = true })
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-  pattern = { "*.md, *.txt" },
+local spellGroup = vim.api.nvim_create_augroup('spell_files', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
+  pattern = { '*.md, *.txt' },
   group = spellGroup,
-  command = "setlocal spell wrap linebreak conceallevel=1",
+  command = 'setlocal spell wrap linebreak conceallevel=1',
   -- this is nice, but will mess with copy/paste
   --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
 })
@@ -823,7 +827,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 
 -- spelling; this doesn't work very well
 -- vim.opt.spell = true
-
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
