@@ -1,3 +1,11 @@
+--nnoremap gp :silent %!prettier --stdin-filepath %<CR>
+
+vim.api.nvim_buf_create_user_command(0, 'JavaFormat', '%!clang-format --assume-filename=% --style=Google', {})
+vim.keymap.set({ 'n', 'v' }, '<leader>rf', function()
+  vim.api.nvim_command 'JavaFormat'
+  vim.notify 'Executed JavaFormat'
+end)
+
 -- faken from https://sookocheff.com/post/vim/neovim-java-ide/
 
 -- local home = os.getenv 'HOME'
