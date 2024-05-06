@@ -427,10 +427,9 @@ require('lazy').setup({
           local mode = vim.api.nvim_get_mode().mode
           local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
 
+          -- todo: this works, but you can't see it due to the statusline saying "VISUAL"
           if is_visual then
-              local msg = "Formatted range in buffer '" .. bufname .. "'"
             vim.notify("Formatted range in buffer '" .. bufname .. "'")
-            require('lualine.utils.notices').add_notice {msg}
             return
           end
 
