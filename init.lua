@@ -345,7 +345,10 @@ require('lazy').setup({
                 }, function(err, did_edit)
                     local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
                     if err then
-                        vim.notify("Error formatting buffer '" .. bufname .. "' '" .. err .. "'", vim.log.levels.ERROR)
+                        vim.notify(
+                            "Error formatting buffer '" .. bufname .. "' '" .. err .. "'",
+                            vim.log.levels.ERROR
+                        )
                         -- todo: send the error to the local quickfix list
                         return
                     end
@@ -460,7 +463,8 @@ vim.wo.signcolumn = 'yes'
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
-vim.opt.colorcolumn = "100"
+-- show a vertical guide rail
+vim.opt.colorcolumn = '100'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
@@ -514,29 +518,81 @@ pcall(require('telescope').load_extension, 'fzf')
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>/', function()
     -- You can pass additional configuration to telescope to change theme, layout, etc.
-    require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-        winblend = 0,
-        previewer = false,
-    })
+    require('telescope.builtin').current_buffer_fuzzy_find(
+        require('telescope.themes').get_dropdown {
+            winblend = 0,
+            previewer = false,
+        }
+    )
 end, { desc = '[/] Fuzzily search in current buffer' })
 
 -- Symbol prefix
 -- vim.keymap.set('n', '<leader>/', require('telescope.builtin').current_buffer_fuzzy_find,
 --   { desc = '[/] Fuzzily search in current buffer' })
-vim.keymap.set('n', '<leader>?', require('telescope.builtin').help_tags, { desc = '[?] Search Help' })
+vim.keymap.set(
+    'n',
+    '<leader>?',
+    require('telescope.builtin').help_tags,
+    { desc = '[?] Search Help' }
+)
 
 -- [S]earch prefix
-vim.keymap.set('n', '<leader>sgf', require('telescope.builtin').git_files, { desc = '[S]earch [G]it [F]iles' })
-vim.keymap.set('n', '<leader>sgs', require('telescope.builtin').git_status, { desc = '[S]earch [G]it [S]tatus' })
-vim.keymap.set('n', '<leader>sgc', require('telescope.builtin').git_commits, { desc = '[S]earch [G]it [C]ommits' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch Current [W]ord' })
-vim.keymap.set('n', '<leader>sbg', require('telescope.builtin').live_grep, { desc = '[S]earch [B]y [G]rep' })
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set(
+    'n',
+    '<leader>sgf',
+    require('telescope.builtin').git_files,
+    { desc = '[S]earch [G]it [F]iles' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>sgs',
+    require('telescope.builtin').git_status,
+    { desc = '[S]earch [G]it [S]tatus' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>sgc',
+    require('telescope.builtin').git_commits,
+    { desc = '[S]earch [G]it [C]ommits' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>sw',
+    require('telescope.builtin').grep_string,
+    { desc = '[S]earch Current [W]ord' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>sbg',
+    require('telescope.builtin').live_grep,
+    { desc = '[S]earch [B]y [G]rep' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>sd',
+    require('telescope.builtin').diagnostics,
+    { desc = '[S]earch [D]iagnostics' }
+)
 
 -- [F]ind prefix
-vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, { desc = '[F]ind Existing [B]uffers' })
-vim.keymap.set('n', '<leader>fr', require('telescope.builtin').oldfiles, { desc = '[F]ind [R]ecently Opened Files' })
-vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = '[F]ind [F]iles' })
+vim.keymap.set(
+    'n',
+    '<leader>fb',
+    require('telescope.builtin').buffers,
+    { desc = '[F]ind Existing [B]uffers' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>fr',
+    require('telescope.builtin').oldfiles,
+    { desc = '[F]ind [R]ecently Opened Files' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>ff',
+    require('telescope.builtin').find_files,
+    { desc = '[F]ind [F]iles' }
+)
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -631,8 +687,18 @@ require('nvim-treesitter.configs').setup {
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-vim.keymap.set('n', '<leader>se', vim.diagnostic.open_float, { desc = '[S]how floating diagnostic message' })
-vim.keymap.set('n', '<leader>le', vim.diagnostic.setloclist, { desc = 'Open diagnostics in [L]ocalList' })
+vim.keymap.set(
+    'n',
+    '<leader>se',
+    vim.diagnostic.open_float,
+    { desc = '[S]how floating diagnostic message' }
+)
+vim.keymap.set(
+    'n',
+    '<leader>le',
+    vim.diagnostic.setloclist,
+    { desc = 'Open diagnostics in [L]ocalList' }
+)
 
 -- disable floating virtual text - use <space>le to open local list and jump around
 vim.diagnostic.config {
@@ -669,7 +735,11 @@ local on_attach = function(_, bufnr)
     nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
     nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
     nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-    nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+    nmap(
+        '<leader>ws',
+        require('telescope.builtin').lsp_dynamic_workspace_symbols,
+        '[W]orkspace [S]ymbols'
+    )
 
     -- See `:help K` for why this keymap
     nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
