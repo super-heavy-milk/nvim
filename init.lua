@@ -95,21 +95,6 @@ require('lazy').setup({
     opts = {},
   },
 
-  -- copilot (see https://github.com/folke/dot/commit/7fbe9130ab631a8b1851c6a6a5242212a2b256e7)
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   enabled = true,
-  --   cmd = "Copilot",
-  --   event = "InsertEnter",
-  --   config = function()
-  --     require("copilot").setup({})
-  --   end,
-  --   -- opts = {
-  --   --   suggestion = { enabled = false },
-  --   --   panel = { enabled = false },
-  --   -- },
-  -- },
-  --
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -130,28 +115,6 @@ require('lazy').setup({
     },
   },
 
-  -- {
-  --   -- Theme inspired by Atom
-  --   'navarasu/onedark.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'onedark'
-  --   end,
-  -- },
-
-  -- {
-  --   'projekt0n/github-nvim-theme',
-  --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   config = function()
-  --     require('github-theme').setup({
-  --       -- ...
-  --     })
-  --
-  --     vim.cmd('colorscheme github_dark_high_contrast')
-  --   end,
-  -- },
-
   {
     'briones-gabriel/darcula-solid.nvim',
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
@@ -167,28 +130,6 @@ require('lazy').setup({
       vim.cmd 'hi Normal guibg=none'
     end,
   },
-
-  -- {
-  --   "phha/zenburn.nvim",
-  --   config = function()
-  --     require('zenburn').setup()
-  --     vim.cmd.colorscheme 'zenburn'
-  --     -- vim.cmd('hi Normal ctermbg=none')
-  --     -- vim.cmd('highlight NonText ctermbg=none')
-  --     -- vim.cmd('hi Normal guibg=none')
-  --   end,
-  -- },
-
-  -- {
-  --   'rose-pine/neovim',
-  --   name = 'rose-pine',
-  --   config = function()
-  --     require('rose-pine').setup({
-  --       disable_background = true
-  --     })
-  --     vim.cmd.colorscheme 'rose-pine'
-  --   end,
-  -- },
 
   {
     -- Set lualine as statusline
@@ -263,21 +204,6 @@ require('lazy').setup({
     end,
   },
 
-  -- GPT plugin
-  -- {
-  --   "jackMort/ChatGPT.nvim",
-  --     event = "VeryLazy",
-  --     config = function()
-  --       require("chatgpt").setup()
-  --     end,
-  --     dependencies = {
-  --       "MunifTanjim/nui.nvim",
-  --       "nvim-lua/plenary.nvim",
-  --       "folke/trouble.nvim",
-  --       "nvim-telescope/telescope.nvim"
-  --     }
-  -- },
-
   -- "gc" to comment visual regions/lines
   {
     'numToStr/Comment.nvim',
@@ -329,22 +255,10 @@ require('lazy').setup({
     lazy = false,
   },
 
-  -- java
-  -- {
-  --   'mfussenegger/nvim-jdtls',
-  -- },
-
   -- kitty.conf highlighting
   {
     'fladson/vim-kitty',
   },
-
-  -- markdown
-  -- {
-  --   'plasticboy/vim-markdown',
-  --   branch = 'master',
-  --   require = { 'godlygeek/tabular' },
-  -- },
 
   -- markdown motions and some basic italics
   {
