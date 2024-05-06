@@ -443,14 +443,15 @@ vim.wo.signcolumn = 'yes'
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
-
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
+-- Set completeopt to have a better completion experience
+-- vim.opt.completeopt = { 'menuone', 'noselect', 'preview' }
+vim.opt.completeopt = { 'menuone', 'noselect' }
+
 -- Better diff display
-vim.o.diffopt = 'internal,filler,closeoff,vertical,iwhite,linematch:60'
+vim.opt.diffopt = { 'internal', 'filler', 'closeoff', 'vertical', 'iwhite', 'linematch:60' }
 
 -- buffer thing (default is true)
 --vim.o.hidden = true
