@@ -160,7 +160,7 @@ require('lazy').setup({
       'rktjmp/lush.nvim',
     },
     config = function()
-      vim.cmd 'colorscheme darcula-solid'
+      vim.cmd.colorscheme 'darcula-solid'
       -- below lines make the background inherit the terminal background
       vim.cmd 'hi Normal ctermbg=none'
       vim.cmd 'highlight NonText ctermbg=none'
@@ -375,7 +375,14 @@ require('lazy').setup({
     config = function()
       local conform = require 'conform'
       conform.setup {
+        -- this doesn't work, but leaving for posterity
+        -- formatters = {
+        --   prettier = {
+        --     prepend_args = { "--plugin", "prettier-plugin-java" }
+        --   }
+        -- },
         formatters_by_ft = {
+          java = { 'prettier' },
           javascript = { 'prettier' },
           typescript = { 'prettier' },
           javascriptreact = { 'prettier' },
@@ -389,6 +396,8 @@ require('lazy').setup({
           graphql = { 'prettier' },
           lua = { 'stylua' },
           python = { 'ruff_format' },
+          bash = { 'shfmt' },
+          sh = { 'shfmt' },
         },
         -- format_on_save = {
         --   lsp_fallback = true,
@@ -401,33 +410,71 @@ require('lazy').setup({
         conform.format({
           lsp_fallback = true,
           async = false,
-          timeout_ms = 1000,
+          timeout_ms = 2000,
         }, function(err, did_edit)
           local bufname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
-          if did_edit then
-            local mode = vim.api.nvim_get_mode().mode
-            local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
-            if is_visual then
-              vim.notify("Formatted range in '" .. bufname .. "'")
-            else
-              vim.notify("Formatted '" .. bufname .. "'")
-            end
-          else
-            vim.notify("Did not format '" .. bufname .. "'")
-          end
           if err then
-            vim.notify("Error formatting '" .. err .. "'")
+            vim.notify("Error formatting buffer '" .. bufname .. "' '" .. err .. "'", vim.log.levels.ERROR)
+            -- todo: send the error to the local quickfix list
+            return
           end
+
+          if not did_edit then
+            vim.notify("Buffer '" .. bufname .. "' is already formatted correctly")
+            return
+          end
+
+          local mode = vim.api.nvim_get_mode().mode
+          local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
+
+          if is_visual then
+              local msg = "Formatted range in buffer '" .. bufname .. "'"
+            vim.notify("Formatted range in buffer '" .. bufname .. "'")
+            require('lualine.utils.notices').add_notice {msg}
+            return
+          end
+
+          vim.notify("Formatted buffer '" .. bufname .. "'")
         end)
-      end, { desc = 'Format file or range (in visual mode)' })
+      end, { desc = 'Format buffer or range (in visual mode)' })
     end,
   },
 
-  -- justfile highlighing
+  -- linting
   {
-    'IndianBoy42/tree-sitter-just',
+    'mfussenegger/nvim-lint',
+    event = {
+      'BufReadPre',
+      'BufNewFile',
+    },
     config = function()
-      require('tree-sitter-just').setup {}
+      local lint = require 'lint'
+
+      lint.linters_by_ft = {
+        java = { 'codespell' },
+        javascript = { 'eslint_d' },
+        typescript = { 'eslint_d' },
+        javascriptreact = { 'eslint_d' },
+        typescriptreact = { 'eslint_d' },
+        svelte = { 'eslint_d' },
+        python = { 'ruff', 'codespell' },
+        markdown = { 'proselint', 'codespell' },
+        yaml = { 'yamllint', 'codespell' },
+        bash = { 'shellcheck', 'codespell' },
+        sh = { 'shellcheck', 'codespell' },
+      }
+
+      local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
+      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
+        group = lint_augroup,
+        callback = function()
+          lint.try_lint()
+        end,
+      })
+
+      vim.keymap.set('n', '<leader>l', function()
+        lint.try_lint()
+      end, { desc = 'Trigger linting for current file' })
     end,
   },
 
@@ -576,6 +623,7 @@ require('nvim-treesitter.configs').setup {
     'html',
     'java',
     'javascript',
+    'json',
     'lua',
     'markdown',
     'markdown_inline',
@@ -585,6 +633,7 @@ require('nvim-treesitter.configs').setup {
     'typescript',
     'vim',
     'vimdoc',
+    'yaml',
   },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)

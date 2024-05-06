@@ -4,7 +4,11 @@ vim.api.nvim_buf_create_user_command(0, 'JavaFormat', '%!clang-format --assume-f
 vim.keymap.set({ 'n', 'v' }, '<leader>rf', function()
   vim.api.nvim_command 'JavaFormat'
   vim.notify 'Executed JavaFormat'
-end)
+end, { buffer = true })
+
+-- see https://stackoverflow.com/questions/6411979/compiling-java-code-in-vim-more-efficiently
+vim.opt_local.makeprg = 'javac %'
+vim.opt_local.errorformat = { '%A%f:%l: %m', '%-Z%p^', '%-C%.%#' }
 
 -- faken from https://sookocheff.com/post/vim/neovim-java-ide/
 
