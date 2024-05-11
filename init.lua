@@ -40,7 +40,17 @@ require('lazy').setup({
     -- NOTE: First, some plugins that don't require any configuration
 
     -- Git related plugins
-    'tpope/vim-fugitive',
+    {
+        'tpope/vim-fugitive',
+        config = function()
+            -- https://jeancharles.quillet.org/posts/2022-03-02-Practical-introduction-to-fugitive.html
+            vim.api.nvim_create_user_command(
+                'GitFileHistory',
+                '0Gllog',
+                { desc = 'browse Git history for a file' }
+            )
+        end,
+    },
     'tpope/vim-rhubarb',
 
     -- Detect tabstop and shiftwidth automatically
@@ -313,22 +323,23 @@ require('lazy').setup({
                 --   }
                 -- },
                 formatters_by_ft = {
+                    bash = { 'shfmt' },
+                    css = { 'prettier' },
+                    graphql = { 'prettier' },
+                    go = { 'golines', 'gofumpt' },
+                    html = { 'prettier' },
                     java = { 'prettier' },
                     javascript = { 'prettier' },
-                    typescript = { 'prettier' },
                     javascriptreact = { 'prettier' },
-                    typescriptreact = { 'prettier' },
-                    svelte = { 'prettier' },
-                    css = { 'prettier' },
-                    html = { 'prettier' },
                     json = { 'prettier' },
-                    yaml = { 'prettier' },
-                    markdown = { 'prettier' },
-                    graphql = { 'prettier' },
                     lua = { 'stylua' },
+                    markdown = { 'prettier' },
                     python = { 'ruff_format' },
-                    bash = { 'shfmt' },
                     sh = { 'shfmt' },
+                    svelte = { 'prettier' },
+                    typescript = { 'prettier' },
+                    typescriptreact = { 'prettier' },
+                    yaml = { 'prettier' },
                 },
                 -- format_on_save = {
                 --   lsp_fallback = true,
@@ -384,17 +395,20 @@ require('lazy').setup({
             local lint = require 'lint'
 
             lint.linters_by_ft = {
+                bash = { 'shellcheck', 'codespell' },
+                css = { 'stylelint' },
+                editorconfig = { 'editorconfig-checker' },
+                html = { 'htmlhint' },
                 java = { 'codespell' },
                 javascript = { 'eslint_d' },
-                typescript = { 'eslint_d' },
                 javascriptreact = { 'eslint_d' },
-                typescriptreact = { 'eslint_d' },
-                svelte = { 'eslint_d' },
+                -- markdown = { 'proselint', 'codespell' },
                 python = { 'ruff', 'codespell' },
-                markdown = { 'proselint', 'codespell' },
-                yaml = { 'yamllint', 'codespell' },
-                bash = { 'shellcheck', 'codespell' },
                 sh = { 'shellcheck', 'codespell' },
+                svelte = { 'eslint_d' },
+                typescript = { 'eslint_d' },
+                typescriptreact = { 'eslint_d' },
+                yaml = { 'yamllint', 'codespell' },
             }
 
             local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
@@ -409,6 +423,10 @@ require('lazy').setup({
                 lint.try_lint()
             end, { desc = 'Trigger linting for current file' })
         end,
+    },
+
+    {
+        'mbbill/undotree',
     },
 
     -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
@@ -521,7 +539,7 @@ vim.keymap.set('n', '<leader>/', function()
     require('telescope.builtin').current_buffer_fuzzy_find(
         require('telescope.themes').get_dropdown {
             winblend = 0,
-            previewer = false,
+            previewer = true,
         }
     )
 end, { desc = '[/] Fuzzily search in current buffer' })
@@ -563,9 +581,9 @@ vim.keymap.set(
 )
 vim.keymap.set(
     'n',
-    '<leader>sbg',
+    '<leader>ss',
     require('telescope.builtin').live_grep,
-    { desc = '[S]earch [B]y [G]rep' }
+    { desc = '[S]earch By Grep' }
 )
 vim.keymap.set(
     'n',
@@ -880,6 +898,8 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     -- this is nice, but will mess with copy/paste
     --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
 })
+
+vim.keymap.set('n', '<leader>e', '<cmd>E<CR>', { desc = '[E]xplore Files' })
 
 -- auto save the buffer
 -- vim.opt.autowriteall = true
