@@ -326,7 +326,7 @@ require('lazy').setup({
                     bash = { 'shfmt' },
                     css = { 'prettier' },
                     graphql = { 'prettier' },
-                    go = { 'golines', 'gofumpt' },
+                    go = { 'golines', 'gofumpt', 'goimports' },
                     html = { 'prettier' },
                     java = { 'prettier' },
                     javascript = { 'prettier' },
@@ -900,6 +900,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
 })
 
 vim.keymap.set('n', '<leader>e', '<cmd>E<CR>', { desc = '[E]xplore Files' })
+vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 
 -- auto save the buffer
 -- vim.opt.autowriteall = true
