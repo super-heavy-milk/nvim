@@ -46,3 +46,5 @@ gitattributes
 init
 Javascript
 IntelliJ
+keymap
+goroutines

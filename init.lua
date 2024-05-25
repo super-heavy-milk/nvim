@@ -160,6 +160,22 @@ require('lazy').setup({
         end,
     },
 
+    -- {
+    --     'mcchrish/zenbones.nvim',
+    --     dependencies = {
+    --         'rktjmp/lush.nvim',
+    --     },
+    --     config = function()
+    --         -- vim.cmd.colorscheme 'zenburned'
+    --         -- vim.cmd.colorscheme 'forestbones'
+    --         vim.cmd.colorscheme 'nordbones'
+    --         -- below lines make the background inherit the terminal background
+    --         vim.cmd 'hi Normal ctermbg=none'
+    --         vim.cmd 'highlight NonText ctermbg=none'
+    --         vim.cmd 'hi Normal guibg=none'
+    --     end,
+    -- },
+
     {
         -- Set lualine as statusline
         'nvim-lualine/lualine.nvim',
@@ -772,6 +788,10 @@ local on_attach = function(_, bufnr)
     -- See `:help K` for why this keymap
     nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
     nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        -- Use a sharp border with `FloatBorder` highlights
+        border = 'single',
+    })
 
     -- Lesser used LSP functionality
     nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -913,7 +933,7 @@ local markdownGroup = vim.api.nvim_create_augroup('markdown_files', { clear = tr
 vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     pattern = { '*.md' },
     group = markdownGroup,
-    command = 'setlocal conceallevel=1',
+    command = 'setlocal conceallevel=2',
     -- this is nice, but will mess with copy/paste
     --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
 })
