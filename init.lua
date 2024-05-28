@@ -70,6 +70,7 @@ require('lazy').setup({
             {
                 'williamboman/mason.nvim',
                 config = true,
+                PATH = 'prepend',
             },
 
             -- Paired with the LSP above
@@ -937,7 +938,6 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     -- this is nice, but will mess with copy/paste
     --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
 })
-
 
 vim.keymap.set('n', '<leader>e', '<cmd>Lexplore<CR>', { desc = '[E]xplore Files (Toggle)' })
 vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
