@@ -441,8 +441,10 @@ require('lazy').setup({
 }, {})
 
 -- set colorscheme here
-vim.cmd.colorscheme 'rose-pine-moon'
+-- vim.cmd.colorscheme 'rose-pine-moon'
 -- vim.cmd.colorscheme 'darcula-solid'
+-- vim.cmd.colorscheme 'github_dark'
+vim.cmd.colorscheme 'gruvbox'
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
