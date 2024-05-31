@@ -10,6 +10,8 @@ end, { buffer = true })
 vim.opt_local.makeprg = 'javac %'
 vim.opt_local.errorformat = { '%A%f:%l: %m', '%-Z%p^', '%-C%.%#' }
 
+vim.keymap.set('n', '<leader>x', '<cmd>w | !javac % | !java %<CR>', { desc = 'Execute the current file' })
+
 -- faken from https://sookocheff.com/post/vim/neovim-java-ide/
 
 -- local home = os.getenv 'HOME'
