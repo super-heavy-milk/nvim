@@ -1,4 +1,12 @@
 
+local utils = require('custom.utils')
+
+-- set colorscheme here
+vim.cmd.colorscheme 'rose-pine-moon'
+-- vim.cmd.colorscheme 'darcula-solid'
+-- vim.cmd.colorscheme 'github_dark'
+-- vim.cmd.colorscheme 'gruvbox'
+
 -- Show a couple lines above and below the cursor when jumping around
 vim.o.scrolloff = 5
 
@@ -48,11 +56,15 @@ vim.opt.completeopt = { 'menuone', 'noselect' }
 -- Better diff display
 vim.opt.diffopt = { 'internal', 'filler', 'closeoff', 'vertical', 'iwhite', 'linematch:60' }
 
+-- spellchecking
+vim.opt.spell = true
+
 -- buffer thing (default is true)
 --vim.o.hidden = true
 
--- auto save the buffer
--- vim.opt.autowriteall = true
+if utils.is_personal_project then
+    vim.opt.autowriteall = true
+end
 
--- spelling; this doesn't work very well
--- vim.opt.spell = true
+
+-- vim.notify('set options from options.lua')

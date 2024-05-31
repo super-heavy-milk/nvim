@@ -15,4 +15,23 @@ M.get_project_root_dir = function()
     return root_dir
 end
 
+-- Some settings I only want enabled in a "personal project"
+--
+-- @return boolean
+M.is_personal_project = function()
+    local root_dir = M.get_project_root_dir()
+    local project_dirs = {
+        'tylerlawton/repos',
+        'tylerlawton/.config/nvim',
+    }
+
+    for _, proj in ipairs(project_dirs) do
+        if root_dir.find(root_dir, proj, 1, true) then
+            return true
+        end
+    end
+
+    return false
+end
+
 return M

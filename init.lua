@@ -389,14 +389,14 @@ require('lazy').setup({
                 editorconfig = { 'editorconfig-checker' },
                 html = { 'htmlhint' },
                 java = { 'codespell' },
-                javascript = { 'eslint_d' },
-                javascriptreact = { 'eslint_d' },
+                -- javascript = { 'eslint_d' },
+                -- javascriptreact = { 'eslint_d' },
                 -- markdown = { 'proselint', 'codespell' },
                 python = { 'ruff', 'codespell' },
                 sh = { 'shellcheck', 'codespell' },
-                svelte = { 'eslint_d' },
-                typescript = { 'eslint_d' },
-                typescriptreact = { 'eslint_d' },
+                -- svelte = { 'eslint_d' },
+                -- typescript = { 'eslint_d' },
+                -- typescriptreact = { 'eslint_d' },
                 yaml = { 'yamllint', 'codespell' },
             }
 
@@ -440,61 +440,11 @@ require('lazy').setup({
     { import = 'custom.plugins' },
 }, {})
 
--- set colorscheme here
--- vim.cmd.colorscheme 'rose-pine-moon'
--- vim.cmd.colorscheme 'darcula-solid'
--- vim.cmd.colorscheme 'github_dark'
-vim.cmd.colorscheme 'gruvbox'
+-- [[ load global options ]]
+require 'custom.options'
 
--- [[ Setting options ]]
--- See `:help vim.o`
--- NOTE: You can change these options as you wish!
-
--- Set highlight on search
-vim.o.hlsearch = false
-
--- Make line numbers default
-vim.wo.number = true
-
--- Enable mouse mode
-vim.o.mouse = 'a'
-
--- Sync clipboard between OS and Neovim.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.o.clipboard = 'unnamedplus'
-
--- Enable break indent
-vim.o.breakindent = true
-
--- Save undo history
-vim.o.undofile = true
-
--- Case-insensitive searching UNLESS \C or capital in search
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
--- Keep signcolumn on by default
-vim.wo.signcolumn = 'yes'
-
--- Decrease update time
-vim.o.updatetime = 250
-vim.o.timeoutlen = 300
-
--- show a vertical guide rail
-vim.opt.colorcolumn = '100'
-
--- NOTE: You should make sure your terminal supports this
-vim.o.termguicolors = true
-
--- Set completeopt to have a better completion experience
-vim.opt.completeopt = { 'menuone', 'noselect' }
-
--- Better diff display
-vim.opt.diffopt = { 'internal', 'filler', 'closeoff', 'vertical', 'iwhite', 'linematch:60' }
-
--- buffer thing (default is true)
---vim.o.hidden = true
+-- [[ load autocommands ]]
+require 'custom.autocmds'
 
 -- [[ Basic Keymaps ]]
 
@@ -505,17 +455,6 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
--- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-vim.api.nvim_create_autocmd('TextYankPost', {
-    callback = function()
-        vim.highlight.on_yank()
-    end,
-    group = highlight_group,
-    pattern = '*',
-})
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -893,38 +832,16 @@ cmp.setup {
     },
 }
 
--- set some options for "textual" files to enhance readability
-local spellGroup = vim.api.nvim_create_augroup('spell_files', { clear = true })
-vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
-    pattern = { '*.md, *.txt' },
-    group = spellGroup,
-    command = 'setlocal spell wrap linebreak',
-    -- this is nice, but will mess with copy/paste
-    --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
-})
-
-local markdownGroup = vim.api.nvim_create_augroup('markdown_files', { clear = true })
-vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
-    pattern = { '*.md' },
-    group = markdownGroup,
-    command = 'setlocal conceallevel=2',
-    -- this is nice, but will mess with copy/paste
-    --command = "setlocal spell wrap linebreak autoindent formatoptions=tacqw textwidth=80 wrapmargin=0",
-})
-
+-- toggle netrw
 vim.keymap.set('n', '<leader>e', '<cmd>Lexplore<CR>', { desc = '[E]xplore Files (Toggle)' })
+
+-- make escape work in the terminal properly
 vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 
 -- vim.keymap.set({ 'n', 't' }, '<M-H>', '<C-W>h', { desc = 'Alt-h for Window Left' })
 -- vim.keymap.set({ 'n', 't' }, '<M-J>', '<C-W>j', { desc = 'Alt-j for Window Down' })
 -- vim.keymap.set({ 'n', 't' }, '<M-K>', '<C-W>k', { desc = 'Alt-k for Window Up' })
 -- vim.keymap.set({ 'n', 't' }, '<M-L>', '<C-W>l', { desc = 'Alt-l for Window Right' })
-
--- auto save the buffer
--- vim.opt.autowriteall = true
-
--- spelling; this doesn't work very well
--- vim.opt.spell = true
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- i've disabled this by removing the 'vim:' prefix thing
