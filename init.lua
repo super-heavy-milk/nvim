@@ -30,12 +30,6 @@ vim.opt.rtp:prepend(lazypath)
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
-    -- time tracking, see https://wakatime.com/dashboard
-    {
-        'wakatime/vim-wakatime',
-        lazy = false,
-    },
-
     -- kitty.conf highlighting
     {
         'fladson/vim-kitty',
