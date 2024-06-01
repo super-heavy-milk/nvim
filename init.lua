@@ -30,22 +30,6 @@ vim.opt.rtp:prepend(lazypath)
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
-    -- "gc" to comment visual regions/lines
-    {
-        'numToStr/Comment.nvim',
-        opts = {
-            padding = true,
-            sticky = true,
-            ignore = nil,
-            toggler = { line = 'gcc', block = 'gbc' },
-            opleader = { line = 'gc', block = 'gb' },
-            extra = { above = 'gcO', below = 'gco', eol = 'gcA' },
-            mappings = { basic = true, extra = true },
-            pre_hook = nil,
-            post_hook = nil,
-        },
-    },
-
     -- Fuzzy Finder (files, lsp, etc)
     {
         'nvim-telescope/telescope.nvim',
