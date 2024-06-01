@@ -25,11 +25,6 @@ vim.keymap.set(
     { desc = 'Open diagnostics in [L]ocalList' }
 )
 
--- disable floating virtual text - use <space>le to open local list and jump around
-vim.diagnostic.config {
-    virtual_text = false,
-}
-
 -- toggle netrw
 vim.keymap.set('n', '<leader>e', '<cmd>Lexplore<CR>', { desc = '[E]xplore Files (Toggle)' })
 
