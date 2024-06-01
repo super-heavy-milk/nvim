@@ -3,6 +3,7 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
         -- Automatically install LSPs to stdpath for neovim
+        -- https://github.com/williamboman/mason.nvim
         {
             'williamboman/mason.nvim',
             config = true,
@@ -10,9 +11,11 @@ return {
         },
 
         -- Paired with the LSP above
+        -- https://github.com/williamboman/mason-lspconfig.nvim
         'williamboman/mason-lspconfig.nvim',
 
-        -- Useful status updates for LSP
+        -- Useful status updates for LSP (spinning thing in right lower corner)
+        -- https://github.com/j-hui/fidget.nvim
         {
             'j-hui/fidget.nvim',
             tag = 'legacy',
@@ -20,6 +23,7 @@ return {
         },
 
         -- Additional lua configuration, makes nvim stuff amazing!
-        'folke/neodev.nvim',
+        -- https://github.com/folke/neodev.nvim
+        { 'folke/neodev.nvim', opts = {} },
     },
 }
