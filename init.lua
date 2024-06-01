@@ -5,7 +5,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- netrw
-vim.g.netrw_liststyle = 3 -- use tree mode by default
+--vim.g.netrw_liststyle = 3 -- use tree mode by default
 vim.g.netrw_winsize = 25 -- 25% vertical split
 
 -- Install package manager
@@ -30,9 +30,6 @@ vim.opt.rtp:prepend(lazypath)
 --  You can also configure plugins after the setup call,
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
-    -- NOTE: First, some plugins that don't require any configuration
-
-    'tpope/vim-rhubarb',
 
     -- Detect tabstop and shiftwidth automatically
     'tpope/vim-sleuth',
