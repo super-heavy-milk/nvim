@@ -31,21 +31,7 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
     {
-        -- Set lualine as statusline
-        'nvim-lualine/lualine.nvim',
-        -- See `:help lualine.txt`
-        opts = {
-            options = {
-                icons_enabled = false,
-                -- theme = 'darcula',
-                component_separators = '|',
-                section_separators = '',
-            },
-        },
-    },
-
-    -- Add indentation guides even on blank lines
-    {
+        -- Add indentation guides even on blank lines
         'lukas-reineke/indent-blankline.nvim',
         main = 'ibl',
         opts = {
