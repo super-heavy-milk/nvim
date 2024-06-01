@@ -8,17 +8,6 @@ vim.g.maplocalleader = ' '
 vim.g.netrw_liststyle = 3 -- use tree mode by default
 vim.g.netrw_winsize = 20 -- 20% vertical split
 
--- Show a couple lines above and below the cursor when jumping around
-vim.o.scrolloff = 5
-
--- https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6
-vim.o.termguicolors = true
-
--- below lines make the background inherit the terminal background
--- vim.cmd('hi Normal ctermbg=none')
--- vim.cmd('highlight NonText ctermbg=none')
--- vim.cmd('hi Normal guibg=none')
-
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
