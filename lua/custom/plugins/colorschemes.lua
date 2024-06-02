@@ -1,6 +1,6 @@
 return {
 
-    -- darcula solid
+    -- [[ Darcula Solid ]]
     -- https://github.com/santos-gabriel-dario/darcula-solid.nvim
     {
         'briones-gabriel/darcula-solid.nvim',
@@ -18,7 +18,7 @@ return {
         end,
     },
 
-    -- rose-pine
+    -- [[ Rose-pine ]]
     -- https://github.com/rose-pine/neovim
     {
         'rose-pine/neovim',
@@ -34,7 +34,7 @@ return {
         end,
     },
 
-    -- zenbones
+    -- [[ Zenbones ]]
     -- https://github.com/mcchrish/zenbones.nvim
     {
         'mcchrish/zenbones.nvim',
@@ -52,7 +52,7 @@ return {
         end,
     },
 
-    -- GitHub themes
+    -- [[ GitHub Themes ]]
     -- https://github.com/projekt0n/github-nvim-theme
     {
         'projekt0n/github-nvim-theme',
@@ -67,7 +67,7 @@ return {
         end,
     },
 
-    -- gruvbox
+    -- [[ Gruvbox ]]
     -- https://github.com/ellisonleao/gruvbox.nvim
     {
         'ellisonleao/gruvbox.nvim',
