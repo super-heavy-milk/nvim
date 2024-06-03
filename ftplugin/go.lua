@@ -10,17 +10,22 @@ vim.keymap.set('n', '<leader>x', function()
 
     local root = u.get_project_root_dir()
     if not root then
-        vim.notify('Unable to find project root for ' .. cur_file, vim.log.levels.WARN)
+        vim.notify('Unable to find project root from ' .. cur_file, vim.log.levels.WARN)
         return
     end
 
-    local main = vim.fn.findfile('main.go', root)
-    if main == '' then
-        vim.notify('Unable to find main.go relative to ' .. cur_file, vim.log.levels.WARN)
+    local main = vim.fs.find({ 'main.go' }, {
+        upward = false,
+        path = root, -- downwards from project root
+        type = 'file',
+        limit = 1, -- only care about first result, stop searching when found
+    })[1]
+    if not main or main == '' then
+        vim.notify("Unable to recursively find 'main.go' in " .. root, vim.log.levels.WARN)
         return
     end
 
     vim.cmd.write '%'
     vim.cmd { cmd = '!', args = { 'go', 'run', main } }
-    vim.notify('Executed ' .. main .. ' in ' .. root)
+    vim.notify('󰨄 Executed ' .. main)
 end, { desc = "Execute the project's main.go file" })
