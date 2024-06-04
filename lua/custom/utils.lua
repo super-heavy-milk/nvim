@@ -34,4 +34,28 @@ M.is_personal_project = function()
     return false
 end
 
+
+M.get_project_justfile = function()
+    local cur_file = vim.api.nvim_buf_get_name(0)
+
+    local root = M.get_project_root_dir()
+    if not root then
+        vim.notify('Unable to find project root from ' .. cur_file, vim.log.levels.WARN)
+        return nil
+    end
+
+    local justfile = vim.fs.find({ 'justfile' }, {
+        upward = false,
+        path = root, -- downwards from project root
+        type = 'file',
+        limit = 1, -- only care about first result, stop searching when found
+    })[1]
+    if not justfile or justfile == '' then
+        vim.notify("Unable to recursively find 'justfile' in " .. root, vim.log.levels.WARN)
+        return nil
+    end
+
+    return justfile
+end
+
 return M
