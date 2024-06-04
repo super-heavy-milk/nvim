@@ -25,6 +25,8 @@ vim.keymap.set('n', '<leader>x', function()
         return
     end
 
+    -- vim.notify(vim.inspect(vim.api.nvim_parse_cmd('!go run ' .. main, {})))
+
     vim.cmd.write '%'
     vim.cmd { cmd = '!', args = { 'go', 'run', main } }
     vim.notify('󰨄 Executed ' .. main)
