@@ -1,43 +1,41 @@
 local u = require 'custom.utils'
 
--- -- toggle netrw
--- vim.keymap.set('n', '<leader>e', '<cmd>Lexplore<CR>', { desc = '[E]xplore Files (Toggle)' })
-
-local toggle_netrw = function()
-    -- @type boolean stateful, tracks if a netrw split has been opened
+local netrw_toggler = function()
+    -- @type boolean - Tracks if a netrw split has been opened.
     local toggled = false
 
-    -- @type integer stateful, tracks the buffer handle of the opened netrw split
+    -- @type integer - Tracks the buffer number of the opened netrw split.
     local toggled_netrw_buf_num = -1
 
+    -- todo: set up listener on the toggled buffer to set toggled to 'false' if closed by another
+    --       action (:q, :close, etc) instead of <leader>e
     return function()
-        vim.notify '--------------------------------------'
+        -------------------
+        -- EARLY RETURN  --
+        -------------------
 
-        -- early return: toggle should short circuit if only netrw is open
+        -- toggle should short circuit if only netrw is open
         if vim.bo.ft == 'netrw' and #vim.api.nvim_list_wins() == 1 then
             vim.notify('Must have more than one window open to toggle Netrw', vim.log.levels.WARN)
             return
         end
 
-        -- early return: if already toggled open, use the stored state to delete the open buffer
-        vim.notify( 'toggled: ' .. tostring(toggled) .. ' toggled_id: ' .. tostring(toggled_netrw_buf_num))
+        -- if already toggled open, use the stored state to delete the open buffer
         if toggled and toggled_netrw_buf_num ~= -1 then
             toggled = false
             vim.api.nvim_buf_delete(toggled_netrw_buf_num, {})
             return
         end
 
-        -- vim.notify(vim.inspect(vim.api.nvim_win_get_config(vim.api.nvim_get_current_win())))
-        -- vim.notify(vim.inspect(vim.api.nvim_list_bufs()))
+        ---------------------------
+        -- BEFORE OPENING NETRW  --
+        ---------------------------
 
-        -- the buffer from which the cmd is launched
+        -- @type string - The buffer from which the cmd is launched.
         local cmd_buf = vim.api.nvim_buf_get_name(0)
 
-        local cmd_buf_parent_dir_path = vim.fs.dirname(cmd_buf)
-        -- [:h] 'head' (last dir, no, trailing slash)
-        -- local cmd_buf_parent_dir_path = vim.fn.expand '%:h'
-        vim.notify('cmd_buf: ' .. cmd_buf)
-        vim.notify('cmd_buf_parent_dir_path: ' .. cmd_buf_parent_dir_path)
+        -- @type string
+        local cmd_buf_parent_dir_path = vim.fs.dirname(cmd_buf) or '.'
 
         -- set last search as file name, so it is highlighted/focused upon netrw open
         vim.cmd [[:let @/=expand("%:t")]] -- [:t] 'tail' (last file), no path
@@ -51,14 +49,11 @@ local toggle_netrw = function()
 
         -- set toggled_id
         toggled_netrw_buf_num = vim.api.nvim_get_current_buf()
-        vim.notify( 'toggled_id: ' .. toggled_netrw_buf_num .. ' name: ' .. vim.api.nvim_buf_get_name(toggled_netrw_buf_num))
 
         -- expand the tree upwards for every parent directory til root is reached
         local root = u.get_project_root_dir() or vim.fn.getcwd()
         for dir in vim.fs.parents(cmd_buf) do
-            vim.notify('dir: ' .. dir .. '\troot: ' .. root)
             if dir == root then
-                vim.notify 'found root'
                 break
             end
             vim.cmd "call netrw#Call('NetrwBrowseUpDir', 1)"
@@ -72,9 +67,13 @@ local toggle_netrw = function()
     end
 end
 
--- netrw
+-- netrw settings
 vim.g.netrw_winsize = 25 -- 25% vertical split
 vim.g.netrw_liststyle = 3 -- use tree mode by default
-local toggler = toggle_netrw()
 
-vim.keymap.set('n', '<leader>e', toggler, { desc = 'Toggle netrw' })
+-- this will store the state for the toggling command
+local toggler = netrw_toggler()
+vim.keymap.set('n', '<leader>e', toggler, { desc = '[E]xpore Files Toggle' })
+
+-- -- toggle netrw
+-- vim.keymap.set('n', '<leader>e', '<cmd>Lexplore<CR>', { desc = '[E]xplore Files (Toggle)' })
