@@ -7,8 +7,9 @@ local netrw_toggler = function()
     -- @type integer - Tracks the buffer number of the opened netrw split.
     local toggled_netrw_buf_num = -1
 
-    -- todo: set up listener on the toggled buffer to set toggled to 'false' if closed by another
-    --       action (:q, :close, etc) instead of <leader>e
+    -- @type integer - Used to hold an autocommand to toggle false upon exiting the netrw buffer.
+    local toggler_group = vim.api.nvim_create_augroup('toggler_group', { clear = true })
+
     return function()
         -------------------
         -- EARLY RETURN  --
@@ -22,8 +23,8 @@ local netrw_toggler = function()
 
         -- if already toggled open, use the stored state to delete the open buffer
         if toggled and toggled_netrw_buf_num ~= -1 then
-            toggled = false
             vim.api.nvim_buf_delete(toggled_netrw_buf_num, {})
+            -- toggled = false -- the autocommand will set this, but leaving for clarity
             return
         end
 
@@ -64,6 +65,16 @@ local netrw_toggler = function()
 
         -- set toggle to true, so that upon next invocation of cmd, the netrw buf is deleted
         toggled = true
+
+        -- handle edge case: quitting netrw with command other than `<leader>e`
+        vim.api.nvim_create_autocmd({ 'WinClosed' }, {
+            group = toggler_group,
+            buffer = toggled_netrw_buf_num, -- pin to the toggled buffer
+            once = true, -- delete after firing, needed because of pin
+            callback = function(ev)
+                toggled = false
+            end,
+        })
     end
 end
 
