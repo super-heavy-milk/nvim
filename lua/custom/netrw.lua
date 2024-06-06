@@ -24,7 +24,8 @@ local netrw_toggler = function()
         -- if already toggled open, use the stored state to delete the open buffer
         if toggled and toggled_netrw_buf_num ~= -1 then
             vim.api.nvim_buf_delete(toggled_netrw_buf_num, {})
-            -- toggled = false -- the autocommand will set this, but leaving for clarity
+            -- because the buffer was deleted,
+            -- the 'WinClosed' autocommand defined below will set `toggled=false`
             return
         end
 
@@ -48,7 +49,8 @@ local netrw_toggler = function()
         -- AFTER OPENING NETRW --
         -------------------------
 
-        -- set toggled_id
+        -- set the variables captured by the closure
+        toggled = true -- so that upon next invocation of `<leader>e`, the netrw buf is deleted
         toggled_netrw_buf_num = vim.api.nvim_get_current_buf()
 
         -- expand the tree upwards for every parent directory til root is reached
@@ -60,18 +62,16 @@ local netrw_toggler = function()
             vim.cmd "call netrw#Call('NetrwBrowseUpDir', 1)"
         end
 
-        -- this will go to the last search, which was set above, and zz will center
+        -- n<CR> will focus/highlight the last search, which was set above
+        -- zz will center the buffer
         vim.cmd ':normal n<CR>zz'
-
-        -- set toggle to true, so that upon next invocation of cmd, the netrw buf is deleted
-        toggled = true
 
         -- handle edge case: quitting netrw with command other than `<leader>e`
         vim.api.nvim_create_autocmd({ 'WinClosed' }, {
             group = toggler_group,
             buffer = toggled_netrw_buf_num, -- pin to the toggled buffer
             once = true, -- delete after firing, needed because of pin
-            callback = function(ev)
+            callback = function()
                 toggled = false
             end,
         })
