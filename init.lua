@@ -4,9 +4,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- netrw
---vim.g.netrw_liststyle = 3 -- use tree mode by default
-vim.g.netrw_winsize = 25 -- 25% vertical split
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -43,6 +40,9 @@ require 'custom.autocmds'
 
 -- [[ load nvim keymaps ]]
 require 'custom.keybinds'
+
+-- [[ load netrw settings ]]
+require 'custom.netrw'
 
 -- [[ load nvim diagnostics settings ]]
 require 'custom.diagnostics'

@@ -25,8 +25,6 @@ vim.keymap.set(
     { desc = 'Open diagnostics in [L]ocalList' }
 )
 
--- toggle netrw
-vim.keymap.set('n', '<leader>e', '<cmd>Lexplore<CR>', { desc = '[E]xplore Files (Toggle)' })
 
 -- make escape work in the terminal properly
 vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
