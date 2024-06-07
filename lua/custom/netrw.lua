@@ -1,5 +1,6 @@
 local u = require 'custom.utils'
 
+-- inspired by https://superuser.com/a/1814266/1006770
 local netrw_toggler = function()
     -- @type boolean - Tracks if a netrw split has been opened.
     local toggled = false
