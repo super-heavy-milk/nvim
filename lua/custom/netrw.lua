@@ -3,7 +3,7 @@ local u = require 'custom.utils'
 -- inspired by https://superuser.com/a/1814266/1006770
 local netrw_toggler = function()
     -- @type boolean - Tracks if a netrw split has been opened.
-    local toggled = false
+    local toggled_open = false
 
     -- @type integer - Tracks the buffer number of the opened netrw split.
     local toggled_netrw_buf_num = -1
@@ -12,21 +12,36 @@ local netrw_toggler = function()
     local toggler_group = vim.api.nvim_create_augroup('toggler_group', { clear = true })
 
     return function()
+        assert(
+            #vim.api.nvim_get_autocmds { group = toggler_group } <= 1,
+            'Autocommand group "toggler_group" should never have more than 1 autocommand.'
+        )
         -------------------
         -- EARLY RETURN  --
         -------------------
 
-        -- toggle should short circuit if only netrw is open
-        if vim.bo.ft == 'netrw' and #vim.api.nvim_list_wins() == 1 then
+        local only_netrw_window = (vim.bo.ft == 'netrw' and #vim.api.nvim_list_wins() == 1)
+        if only_netrw_window then
             vim.notify('Must have more than one window open to toggle Netrw', vim.log.levels.WARN)
             return
         end
 
-        -- if already toggled open, use the stored state to delete the open buffer
-        if toggled and toggled_netrw_buf_num ~= -1 then
+        if toggled_open then
+            assert(
+                toggled_netrw_buf_num ~= -1,
+                'Variable toggled_netrw_buf_num must be initalized to valid buffer number.'
+            )
+
             vim.api.nvim_buf_delete(toggled_netrw_buf_num, {})
-            -- because the buffer was deleted,
-            -- the 'WinClosed' autocommand defined below will set `toggled=false`
+
+            assert(
+                toggled_open == false,
+                'The WinClosed autocommand on toggle_group should have set toggled_open=false.'
+            )
+            assert(
+                #vim.api.nvim_get_autocmds { group = toggler_group } == 0,
+                'The single autocommand on toggler_group should have been deleted after firing.'
+            )
             return
         end
 
@@ -51,7 +66,7 @@ local netrw_toggler = function()
         -------------------------
 
         -- set the variables captured by the closure
-        toggled = true -- so that upon next invocation of `<leader>e`, the netrw buf is deleted
+        toggled_open = true
         toggled_netrw_buf_num = vim.api.nvim_get_current_buf()
 
         -- expand the tree upwards for every parent directory til root is reached
@@ -73,7 +88,7 @@ local netrw_toggler = function()
             buffer = toggled_netrw_buf_num, -- pin to the toggled buffer
             once = true, -- delete after firing, needed because of pin
             callback = function()
-                toggled = false
+                toggled_open = false
             end,
         })
     end
