@@ -5,3 +5,4 @@ vim.keymap.set(
     '<cmd>.python3<CR>',
     { desc = 'Execute the current line(s)' }
 )
+-- syntax keyword Normal lambda LAMBDA lambda_ _lambda conceal cchar=λ

@@ -1,16 +1,28 @@
 local utils = require 'custom.utils'
 
 -- set colorscheme here
-vim.cmd.colorscheme 'rose-pine-moon'
+-- vim.cmd.colorscheme 'rose-pine-moon'
+vim.cmd.colorscheme 'habamax'
 -- vim.cmd.colorscheme 'darcula-solid'
 -- vim.cmd.colorscheme 'github_dark'
 -- vim.cmd.colorscheme 'gruvbox'
 
 -- hack to make background transparent
 if vim.g.colors_name == 'darcula-solid' then
-    vim.cmd 'highligh Normal ctermbg=none'
-    vim.cmd 'highlight Normal guibg=none'
+    vim.cmd 'highlight Normal ctermbg=NONE guibg=NONE'
     vim.cmd 'highlight NonText ctermbg=none'
+end
+
+if vim.g.colors_name == 'habamax' then
+    -- vim.cmd 'highlight SpellBad cterm=underline ctermfg=167 gui=undercurl guisp=#d75f5f'
+    vim.cmd 'highlight SpellBad cterm=underline ctermfg=139 gui=undercurl guisp=#d75f5f'
+
+    vim.cmd 'highlight Normal ctermbg=NONE guibg=NONE'
+    vim.cmd 'highlight NonText ctermbg=NONE'
+    -- vim.cmd 'highlight SignColumn ctermbg=NONE'
+    -- vim.cmd 'highlight Normal ctermbg=none'
+    -- vim.cmd 'highlight Normal guibg=none'
+    -- vim.cmd 'highlight NonText ctermbg=none'
 end
 
 -- Show a couple lines above and below the cursor when jumping around
@@ -50,8 +62,8 @@ vim.wo.signcolumn = 'yes'
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
--- show a vertical guide rail
-vim.opt.colorcolumn = '100'
+-- -- show a vertical guide rail
+-- vim.opt.colorcolumn = '100'
 
 -- https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6
 -- NOTE: You should make sure your terminal supports this
